@@ -1,2 +1,11 @@
 language = "rust"
 run = "[ -x ~/.cargo/bin/rustlings ] && ~/.cargo/bin/rustlings watch || ./install.sh"
+
+[nix]
+channel = "stable-22_05"
+
+[packager]
+language = "rust"
+
+[packager.features]
+packageSearch = true
