@@ -29,12 +29,21 @@ pub enum Command {
 mod my_module {
     use super::Command;
 
-    // TODO: Complete the function signature!
-    pub fn transformer(input: ???) -> ??? {
-        // TODO: Complete the output declaration!
-        let mut output: ??? = vec![];
+    pub fn transformer(input: Vec<(String,Command)>) -> Vec<String> {
+        let bar = "bar";
+        let mut output: Vec<String> = vec![];
         for (string, command) in input.iter() {
-            // TODO: Complete the function body. You can do it!
+            match command {
+                Command::Uppercase => {
+                    output.push(string.to_uppercase());
+                },
+                Command::Trim => {
+                    output.push(string.trim().to_string());
+                },
+                Command::Append(u) => {
+                    output.push(format!("{}{}", string, bar.repeat(*u)));
+                }
+            }
         }
         output
     }
@@ -43,20 +52,37 @@ mod my_module {
 #[cfg(test)]
 mod tests {
     // TODO: What do we have to import to have `transformer` in scope?
-    use ???;
+    use my_module::transformer;
     use super::Command;
+    use string;
+    use string_slice;
 
     #[test]
     fn it_works() {
-        let output = transformer(vec![
+        // &str to_owned => String
+        let vec: Vec<(String,Command)> = vec![
+            // into return &str
             ("hello".into(), Command::Uppercase),
             (" all roads lead to rome! ".into(), Command::Trim),
             ("foo".into(), Command::Append(1)),
             ("bar".into(), Command::Append(5)),
-        ]);
+        ];
+        string(vec[0].0.clone());
+        // &str == &String
+        string_slice(&vec[0].0);
+        let output = transformer(vec);
+        string_slice("bar".into());
+        string(output[0].clone());
         assert_eq!(output[0], "HELLO");
         assert_eq!(output[1], "all roads lead to rome!");
         assert_eq!(output[2], "foobar");
         assert_eq!(output[3], "barbarbarbarbarbar");
     }
+}
+
+fn string_slice(arg: &str) {
+    println!("{}", arg);
+}
+fn string(arg: String) {
+    println!("{}", arg);
 }
